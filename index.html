@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>청년 로컬창업 바우처 심사 현황</title>
+<style>
+:root{--navy:#142f49;--blue:#245b91;--ink:#1e2b38;--muted:#657587;--line:#dce4ec;--bg:#f4f7fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Malgun Gothic",sans-serif}
+header{background:var(--navy);color:white;padding:26px max(20px,calc((100% - 1200px)/2))}
+header .eyebrow{font-size:12px;letter-spacing:.08em;color:#c6d7e7}header h1{margin:8px 0;font-size:25px}header p{margin:0;color:#d4e0eb;font-size:14px}
+main{max-width:1200px;margin:24px auto;padding:0 18px}
+.panel{background:white;border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:16px;box-shadow:0 2px 8px #142f4908}
+h2{font-size:17px;margin:0 0 13px}.sub{font-size:12px;color:var(--muted);margin:6px 0 0}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px}
+.stat label{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:25px;margin-top:8px;font-variant-numeric:tabular-nums}
+.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+input[type=search],input[type=file]{border:1px solid #cbd6e1;border-radius:8px;background:#fff;padding:10px;font:inherit;font-size:13px}
+button{border:0;border-radius:8px;padding:10px 14px;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+button.alt{background:#e9eff5;color:#29445d}
+.criteria{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rule{background:#f7f9fc;border:1px solid #e4eaf0;border-radius:9px;padding:12px;font-size:13px;line-height:1.65}
+.rule b{display:block;margin-bottom:4px;color:#304b66}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:13px}
+th,td{padding:12px 13px;border-bottom:1px solid #e9eef3;text-align:left}
+th{background:#eef3f8;color:#344b60;font-weight:700;position:sticky;top:0}
+td.right{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;border-radius:30px;padding:5px 10px;font-size:12px;font-weight:750}
+.ok{background:#e3f4e9;color:#17653b}.no{background:#fde9e7;color:#a02d27}.bad{background:#fff0d2;color:#885700}.dup{background:#eee8fc;color:#5b3d99}
+.count{font-size:12px;color:var(--muted);margin:0 0 9px}
+.notice{font-size:12px;color:var(--muted);line-height:1.7;margin:12px 0 0}
+@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.stat:last-child{grid-column:span 2}.criteria{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><div class="eyebrow">중소벤처기업부 · 지역상권활력과</div><h1>청년 로컬창업 바우처 심사 현황</h1><p>신청 24건 · 판정 기준에 따른 자동 계산 결과</p></header>
+<main>
+<section class="stats" aria-label="심사 요약">
+<div class="stat"><label>승인</label><strong id="s-ok">17건</strong></div>
+<div class="stat"><label>반려</label><strong id="s-no">4건</strong></div>
+<div class="stat"><label>심사불가</label><strong id="s-bad">2건</strong></div>
+<div class="stat"><label>중복접수</label><strong id="s-dup">1건</strong></div>
+<div class="stat"><label>승인 신청액 합계</label><strong id="s-sum">26,360,000원</strong></div>
+</section>
+<section class="panel">
+<h2>심사 처리 기준</h2>
+<div class="criteria">
+<div class="rule"><b>승인 · 반려</b>한도액은 직원수 × 480,000원입니다. 신청액이 한도액 이하이면 승인(동일 금액 포함), 초과하면 반려합니다.</div>
+<div class="rule"><b>심사불가</b>직원수 또는 신청액이 비어 있거나 0 이하인 신청은 심사불가로 분류합니다.</div>
+<div class="rule"><b>중복접수</b>같은 상호가 2건 이상이면 신청일이 가장 최신인 1건만 심사하고 이전 신청은 중복접수로 분류합니다.</div>
+<div class="rule"><b>요약 집계</b>심사불가·중복접수는 승인·반려 건수 및 승인 신청액 합계에서 제외합니다. 동일 상호·동일 신청일이면 원자료에서 뒤에 기재된 건을 최신 건으로 처리합니다.</div>
+</div>
+</section>
+<section class="panel">
+<div class="toolbar" style="justify-content:space-between;margin-bottom:12px">
+<h2 style="margin:0">신청 내역</h2>
+<div class="toolbar"><input id="q" type="search" placeholder="상호명 검색" aria-label="상호명 검색"><button id="sort" class="alt">신청액 내림차순 정렬</button></div>
+</div>
+<p class="count" id="count">표시 24건 / 전체 24건</p>
+<div class="table-wrap"><table><thead><tr><th>상호명</th><th>업종</th><th>직원수</th><th>신청액</th><th>한도액</th><th>신청일</th><th>판정</th></tr></thead><tbody id="tbody"></tbody></table></div>
+<p class="notice">자료 기준: 제공된 「바우처_신청목록.csv」 24건. 한도액 및 판정은 브라우저에서 원자료를 기준으로 계산합니다. 실제 지원 결정 전에는 원본 신청서와 공고상 자격요건을 별도로 확인해야 합니다.</p>
+</section>
+<section class="panel">
+<h2>자료 교체</h2><div class="toolbar"><input type="file" id="csv" accept=".csv,text/csv"><button id="upload" class="alt">CSV 불러오기</button></div>
+<p class="sub">같은 열 구성(상호명, 업종, 직원수, 신청액, 신청일)의 CSV를 선택하면 표와 요약이 다시 계산됩니다. 파일은 브라우저 안에서 처리되며 별도 서버로 전송되지 않습니다.</p>
+</section>
+</main>
+<script>
+const INITIAL=[
+  {
+    "상호명": "한밭공방",
+    "업종": "공예",
+    "직원수": "5",
+    "신청액": "2400000",
+    "신청일": "2026-11-18"
+  },
+  {
+    "상호명": "두루미분식",
+    "업종": "분식",
+    "직원수": "5",
+    "신청액": "2450000",
+    "신청일": "2026-11-18"
+  },
+  {
+    "상호명": "바다풍경수산",
+    "업종": "수산",
+    "직원수": "",
+    "신청액": "1900000",
+    "신청일": "2026-11-19"
+  },
+  {
+    "상호명": "별헤는밤서점",
+    "업종": "서적",
+    "직원수": "3",
+    "신청액": "-800000",
+    "신청일": "2026-11-20"
+  },
+  {
+    "상호명": "초원야채",
+    "업종": "청과",
+    "직원수": "2",
+    "신청액": "900000",
+    "신청일": "2026-11-17"
+  },
+  {
+    "상호명": "황금손정육",
+    "업종": "정육",
+    "직원수": "4",
+    "신청액": "2100000",
+    "신청일": "2026-11-19"
+  },
+  {
+    "상호명": "달무리찻집",
+    "업종": "카페",
+    "직원수": "3",
+    "신청액": "1400000",
+    "신청일": "2026-11-21"
+  },
+  {
+    "상호명": "푸른바람세탁",
+    "업종": "세탁",
+    "직원수": "2",
+    "신청액": "950000",
+    "신청일": "2026-11-18"
+  },
+  {
+    "상호명": "고운결미용실",
+    "업종": "미용",
+    "직원수": "3",
+    "신청액": "1500000",
+    "신청일": "2026-11-22"
+  },
+  {
+    "상호명": "새벽빵집",
+    "업종": "제과",
+    "직원수": "4",
+    "신청액": "1900000",
+    "신청일": "2026-11-20"
+  },
+  {
+    "상호명": "들녘반찬",
+    "업종": "반찬",
+    "직원수": "3",
+    "신청액": "1420000",
+    "신청일": "2026-11-19"
+  },
+  {
+    "상호명": "한올수선",
+    "업종": "수선",
+    "직원수": "1",
+    "신청액": "470000",
+    "신청일": "2026-11-21"
+  },
+  {
+    "상호명": "돌샘철물",
+    "업종": "철물",
+    "직원수": "3",
+    "신청액": "1430000",
+    "신청일": "2026-11-23"
+  },
+  {
+    "상호명": "연필과지우개",
+    "업종": "문구",
+    "직원수": "2",
+    "신청액": "940000",
+    "신청일": "2026-11-24"
+  },
+  {
+    "상호명": "솔향약초",
+    "업종": "약재",
+    "직원수": "4",
+    "신청액": "1850000",
+    "신청일": "2026-11-20"
+  },
+  {
+    "상호명": "들꽃자리화원",
+    "업종": "화훼",
+    "직원수": "3",
+    "신청액": "1440000",
+    "신청일": "2026-11-25"
+  },
+  {
+    "상호명": "이슬찻잔도예",
+    "업종": "공예",
+    "직원수": "2",
+    "신청액": "980000",
+    "신청일": "2026-11-26"
+  },
+  {
+    "상호명": "미르식당",
+    "업종": "한식",
+    "직원수": "6",
+    "신청액": "2800000",
+    "신청일": "2026-11-22"
+  },
+  {
+    "상호명": "섬마을건어물",
+    "업종": "건어물",
+    "직원수": "4",
+    "신청액": "1880000",
+    "신청일": "2026-11-24"
+  },
+  {
+    "상호명": "가온책방",
+    "업종": "서적",
+    "직원수": "2",
+    "신청액": "930000",
+    "신청일": "2026-11-25"
+  },
+  {
+    "상호명": "동트는국수",
+    "업종": "한식",
+    "직원수": "4",
+    "신청액": "1870000",
+    "신청일": "2026-11-26"
+  },
+  {
+    "상호명": "윤슬유리공예",
+    "업종": "공예",
+    "직원수": "3",
+    "신청액": "1380000",
+    "신청일": "2026-11-27"
+  },
+  {
+    "상호명": "청춘피자",
+    "업종": "양식",
+    "직원수": "5",
+    "신청액": "2300000",
+    "신청일": "2026-11-15"
+  },
+  {
+    "상호명": "청춘피자",
+    "업종": "양식",
+    "직원수": "5",
+    "신청액": "2400000",
+    "신청일": "2026-11-28"
+  }
+];
+let data=INITIAL.map((x,i)=>({...x,_i:i})),descending=false;
+const won=n=>Number.isFinite(n)?Math.round(n).toLocaleString('ko-KR')+'원':'—';
+const numeric=v=>{if(v===null||v===undefined||String(v).trim()==='')return NaN;return Number(String(v).replace(/[,\s원₩]/g,''));};
+function classify(list){
+ const groups=new Map();list.forEach((x,i)=>{const k=String(x.상호명||'').trim().toLocaleLowerCase();if(k){if(!groups.has(k))groups.set(k,[]);groups.get(k).push(i);}});
+ const latest=new Map();for(const [k,ix] of groups){let best=ix[0];for(const i of ix){const a=Date.parse(list[i].신청일)||-Infinity,b=Date.parse(list[best].신청일)||-Infinity;if(a>b||(a===b&&i>best))best=i;}latest.set(k,best);}
+ return list.map((x,i)=>{const k=String(x.상호명||'').trim().toLocaleLowerCase(),staff=numeric(x.직원수),amount=numeric(x.신청액),dupe=k&&groups.get(k).length>1&&latest.get(k)!==i,limit=Number.isFinite(staff)&&staff>0?staff*480000:NaN;
+ let status;if(dupe)status='중복접수';else if(!Number.isFinite(staff)||staff<=0||!Number.isFinite(amount)||amount<=0)status='심사불가';else status=amount<=limit?'승인':'반려';
+ return {...x,_staff:staff,_amount:amount,_limit:limit,_status:status,_i:i};});
+}
+function render(){
+ const counts={'승인':0,'반려':0,'심사불가':0,'중복접수':0};let sum=0;
+ data.forEach(x=>{counts[x._status]++;if(x._status==='승인')sum+=x._amount;});
+ document.getElementById('s-ok').textContent=counts['승인']+'건';document.getElementById('s-no').textContent=counts['반려']+'건';document.getElementById('s-bad').textContent=counts['심사불가']+'건';document.getElementById('s-dup').textContent=counts['중복접수']+'건';document.getElementById('s-sum').textContent=won(sum);
+ const term=document.getElementById('q').value.trim().toLocaleLowerCase();let view=data.filter(x=>String(x.상호명||'').toLocaleLowerCase().includes(term));
+ if(descending)view.sort((a,b)=>(Number.isFinite(b._amount)?b._amount:-Infinity)-(Number.isFinite(a._amount)?a._amount:-Infinity)||a._i-b._i);
+ document.getElementById('count').textContent=`표시 ${view.length}건 / 전체 ${data.length}건`;
+ const body=document.getElementById('tbody');body.replaceChildren();
+ view.forEach(x=>{const tr=document.createElement('tr');const vals=[x.상호명||'—',x.업종||'—',Number.isFinite(x._staff)?x._staff.toLocaleString('ko-KR'):'—',won(x._amount),won(x._limit),x.신청일||'—'];
+ vals.forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i>=2&&i<=4)td.className='right';tr.append(td);});
+ const td=document.createElement('td'),span=document.createElement('span');span.className='pill '+({'승인':'ok','반려':'no','심사불가':'bad','중복접수':'dup'}[x._status]);span.textContent=x._status;td.append(span);tr.append(td);body.append(tr);});
+}
+function parseCSV(text){text=text.replace(/^﻿/,'');let a=[],row=[],v='',quote=false;for(let i=0;i<text.length;i++){const c=text[i];if(quote){if(c==='"'&&text[i+1]==='"'){v+='"';i++;}else if(c==='"')quote=false;else v+=c;}else if(c==='"')quote=true;else if(c===','){row.push(v);v='';}else if(c==='\n'){row.push(v.replace(/\r$/,''));a.push(row);row=[];v='';}else v+=c;}if(v.length||row.length){row.push(v.replace(/\r$/,''));a.push(row);}return a.filter(r=>r.some(c=>String(c).trim()));}
+document.getElementById('q').addEventListener('input',render);
+document.getElementById('sort').addEventListener('click',()=>{descending=!descending;document.getElementById('sort').textContent=descending?'정렬 해제':'신청액 내림차순 정렬';render();});
+document.getElementById('upload').addEventListener('click',async()=>{const f=document.getElementById('csv').files[0];if(!f){alert('CSV 파일을 먼저 선택하세요.');return;}try{const grid=parseCSV(await f.text()),h=grid[0].map(v=>v.trim().replace(/\s/g,'')),need=['상호명','업종','직원수','신청액','신청일'];const ix=need.map(n=>h.indexOf(n));if(ix.some(i=>i<0))throw Error('필수 열 누락: '+need.filter((n,j)=>ix[j]<0).join(', '));const next=grid.slice(1).map(r=>Object.fromEntries(need.map((n,j)=>[n,r[ix[j]]??''])));data=classify(next);descending=false;document.getElementById('sort').textContent='신청액 내림차순 정렬';render();}catch(e){alert('CSV 읽기 오류: '+e.message);}});
+data=classify(data);render();
+</script></body></html>
